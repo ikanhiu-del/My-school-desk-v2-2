@@ -1,0 +1,716 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My School Desk - Smart Tasks</title>
+
+<style>
+:root {
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --text: #20283a;
+  --muted: #788197;
+  --primary: #5267d9;
+  --border: #e5e8f0;
+  --high: #e65b67;
+  --medium: #e5a33b;
+  --low: #35a77a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 24px 14px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  max-width: 850px;
+  margin: auto;
+}
+
+header {
+  margin-bottom: 24px;
+}
+
+header h1 {
+  margin: 0 0 7px;
+  font-size: 27px;
+}
+
+header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.stat {
+  background: var(--card);
+  padding: 17px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+.stat small {
+  color: var(--muted);
+}
+
+.stat strong {
+  display: block;
+  font-size: 27px;
+  margin-top: 7px;
+}
+
+.panel {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 15px;
+  border: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+
+h2 {
+  font-size: 18px;
+  margin: 0 0 16px;
+}
+
+input, select, textarea, button {
+  font: inherit;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: white;
+  margin-bottom: 11px;
+  color: var(--text);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 75px;
+}
+
+button {
+  border: none;
+  border-radius: 9px;
+  padding: 11px 15px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.primary {
+  background: var(--primary);
+  color: white;
+  width: 100%;
+}
+
+.secondary {
+  background: #eef0fb;
+  color: var(--primary);
+}
+
+.danger {
+  background: #fff0f0;
+  color: #d34d58;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 180px;
+  gap: 10px;
+}
+
+.filters input, .filters select {
+  margin-bottom: 0;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin: 23px 0 12px;
+}
+
+.section-title h2 {
+  margin: 0;
+}
+
+.count {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.task {
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--primary);
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 11px;
+}
+
+.task.high { border-left-color: var(--high); }
+.task.medium { border-left-color: var(--medium); }
+.task.low { border-left-color: var(--low); }
+
+.task-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.task h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.task p {
+  margin: 7px 0;
+  font-size: 13px;
+  color: var(--muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 5px 8px;
+  border-radius: 20px;
+  background: #eef0fb;
+  color: var(--primary);
+  margin: 2px 4px 2px 0;
+}
+
+.tag.high { background: #fff0f0; color: var(--high); }
+.tag.medium { background: #fff6e8; color: #b77b1e; }
+.tag.low { background: #eaf8f1; color: var(--low); }
+.tag.warning { background: #fff5df; color: #b77b1e; }
+.tag.overdue { background: #ffe9e9; color: #d34d58; }
+.tag.today { background: #eeeaff; color: #7254c7; }
+
+.task-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.task-actions button {
+  font-size: 12px;
+  padding: 8px 10px;
+}
+
+.completed {
+  opacity: 0.78;
+}
+
+.completed h3 {
+  text-decoration: line-through;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px 10px;
+  font-size: 14px;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  margin: 25px 0 10px;
+}
+
+@media (max-width: 520px) {
+  .stats {
+    gap: 7px;
+  }
+
+  .stat {
+    padding: 12px 9px;
+  }
+
+  .stat strong {
+    font-size: 22px;
+  }
+
+  .stat small {
+    font-size: 11px;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 15px;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>My School Desk</h1>
+  <p>Smart Task Management · Proyek 2.2</p>
+</header>
+
+<section class="stats">
+  <div class="stat">
+    <small>Total Tugas</small>
+    <strong id="totalCount">0</strong>
+  </div>
+  <div class="stat">
+    <small>Tugas Aktif</small>
+    <strong id="activeCount">0</strong>
+  </div>
+  <div class="stat">
+    <small>Tugas Selesai</small>
+    <strong id="doneCount">0</strong>
+  </div>
+</section>
+
+<section class="panel">
+  <h2 id="formTitle">Tambah Tugas Baru</h2>
+
+  <form id="taskForm">
+    <input id="taskName" type="text"
+      placeholder="Nama tugas..." required maxlength="120">
+
+    <select id="taskPriority">
+      <option value="high">Prioritas Tinggi</option>
+      <option value="medium" selected>Prioritas Sedang</option>
+      <option value="low">Prioritas Rendah</option>
+    </select>
+
+    <label for="taskDeadline">Deadline</label>
+    <input id="taskDeadline" type="date">
+
+    <textarea id="taskDescription"
+      placeholder="Catatan atau keterangan tugas..."></textarea>
+
+    <button class="primary" type="submit" id="submitButton">
+      + Tambahkan Tugas
+    </button>
+
+    <button class="secondary hidden" type="button"
+      id="cancelEdit" style="width:100%;margin-top:8px">
+      Batal Edit
+    </button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Daftar Tugas</h2>
+
+  <div class="filters">
+    <input id="searchInput" type="search"
+      placeholder="Cari nama atau keterangan tugas...">
+
+    <select id="priorityFilter">
+      <option value="all">Semua Prioritas</option>
+      <option value="high">Prioritas Tinggi</option>
+      <option value="medium">Prioritas Sedang</option>
+      <option value="low">Prioritas Rendah</option>
+    </select>
+  </div>
+
+  <div class="section-title">
+    <h2>Tugas Aktif</h2>
+    <span class="count" id="activeLabel">0 tugas</span>
+  </div>
+
+  <div id="activeTasks"></div>
+
+  <div class="section-title">
+    <h2>Tugas Selesai</h2>
+    <span class="count" id="completedLabel">0 tugas</span>
+  </div>
+
+  <div id="completedTasks"></div>
+</section>
+
+<footer>
+  My School Desk · Smart Task Management
+</footer>
+
+</div>
+
+<script>
+const STORAGE_KEY = "mySchoolDeskSmartV22";
+
+let tasks = [];
+let editingId = null;
+
+const form = document.getElementById("taskForm");
+const nameInput = document.getElementById("taskName");
+const priorityInput = document.getElementById("taskPriority");
+const deadlineInput = document.getElementById("taskDeadline");
+const descriptionInput = document.getElementById("taskDescription");
+
+function loadTasks() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const parsed = saved ? JSON.parse(saved) : [];
+    tasks = Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    tasks = [];
+  }
+}
+
+function saveTasks() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+}
+
+function getToday() {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function daysUntil(dateString) {
+  if (!dateString) return null;
+
+  const today = getToday();
+  const todayDate = new Date(today + "T00:00:00");
+  const deadlineDate = new Date(dateString + "T00:00:00");
+
+  return Math.round(
+    (deadlineDate - todayDate) / 86400000
+  );
+}
+
+function formatDate(dateString) {
+  if (!dateString) return "Belum ditentukan";
+
+  const date = new Date(dateString + "T00:00:00");
+
+  return date.toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function priorityName(priority) {
+  const names = {
+    high: "Tinggi",
+    medium: "Sedang",
+    low: "Rendah"
+  };
+
+  return names[priority] || "Sedang";
+}
+
+function deadlineStatus(task) {
+  if (!task.deadline) return "";
+
+  const days = daysUntil(task.deadline);
+
+  if (days < 0) {
+    return `<span class="tag overdue">Terlambat ${Math.abs(days)} hari</span>`;
+  }
+
+  if (days === 0) {
+    return `<span class="tag today">Deadline hari ini</span>`;
+  }
+
+  if (days <= 3) {
+    return `<span class="tag warning">Deadline ${days} hari lagi</span>`;
+  }
+
+  return `<span class="tag">Masih ${days} hari</span>`;
+}
+
+function sortTasks(list) {
+  const priorityOrder = {
+    high: 1,
+    medium: 2,
+    low: 3
+  };
+
+  return [...list].sort((a, b) => {
+    if (a.deadline && b.deadline) {
+      if (a.deadline !== b.deadline) {
+        return a.deadline.localeCompare(b.deadline);
+      }
+    }
+
+    if (a.deadline && !b.deadline) return -1;
+    if (!a.deadline && b.deadline) return 1;
+
+    return (priorityOrder[a.priority] || 2) -
+      (priorityOrder[b.priority] || 2);
+  });
+}
+
+function updateStats() {
+  const active = tasks.filter(task => !task.done).length;
+  const completed = tasks.filter(task => task.done).length;
+
+  document.getElementById("totalCount").textContent = tasks.length;
+  document.getElementById("activeCount").textContent = active;
+  document.getElementById("doneCount").textContent = completed;
+
+  document.getElementById("activeLabel").textContent =
+    active + " tugas";
+
+  document.getElementById("completedLabel").textContent =
+    completed + " tugas";
+}
+
+function createTaskElement(task) {
+  const div = document.createElement("article");
+
+  div.className = `task ${task.priority || "medium"} ${
+    task.done ? "completed" : ""
+  }`;
+
+  const title = document.createElement("h3");
+  title.textContent = task.name;
+
+  const description = document.createElement("p");
+  description.textContent = task.description || "Tidak ada catatan.";
+
+  const deadline = document.createElement("p");
+  deadline.textContent = "Deadline: " + formatDate(task.deadline);
+
+  const tags = document.createElement("div");
+
+  const priorityTag = document.createElement("span");
+  priorityTag.className = `tag ${task.priority || "medium"}`;
+  priorityTag.textContent = "Prioritas " + priorityName(task.priority);
+
+  tags.appendChild(priorityTag);
+
+  if (!task.done && task.deadline) {
+    const temp = document.createElement("span");
+    temp.innerHTML = deadlineStatus(task);
+    tags.appendChild(temp.firstElementChild);
+  }
+
+  const actions = document.createElement("div");
+  actions.className = "task-actions";
+
+  const completeButton = document.createElement("button");
+  completeButton.className = "secondary";
+  completeButton.textContent = task.done
+    ? "Kembalikan"
+    : "Tandai Selesai";
+  completeButton.addEventListener("click", () => toggleTask(task.id));
+
+  const editButton = document.createElement("button");
+  editButton.className = "secondary";
+  editButton.textContent = "Edit";
+  editButton.addEventListener("click", () => editTask(task.id));
+
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "danger";
+  deleteButton.textContent = "Hapus";
+  deleteButton.addEventListener("click", () => deleteTask(task.id));
+
+  actions.append(completeButton);
+
+  if (!task.done) {
+    actions.append(editButton);
+  }
+
+  actions.append(deleteButton);
+
+  const top = document.createElement("div");
+  top.className = "task-top";
+  top.appendChild(title);
+
+  div.append(top, tags, deadline, description, actions);
+
+  return div;
+}
+
+function renderTasks() {
+  const activeContainer = document.getElementById("activeTasks");
+  const completedContainer = document.getElementById("completedTasks");
+
+  activeContainer.innerHTML = "";
+  completedContainer.innerHTML = "";
+
+  const search = document.getElementById("searchInput")
+    .value.toLowerCase().trim();
+
+  const priorityFilter = document.getElementById("priorityFilter").value;
+
+  const filtered = tasks.filter(task => {
+    const matchesSearch =
+      (task.name || "").toLowerCase().includes(search) ||
+      (task.description || "").toLowerCase().includes(search);
+
+    const matchesPriority =
+      priorityFilter === "all" ||
+      task.priority === priorityFilter;
+
+    return matchesSearch && matchesPriority;
+  });
+
+  const active = sortTasks(filtered.filter(task => !task.done));
+  const completed = sortTasks(filtered.filter(task => task.done));
+
+  if (active.length === 0) {
+    activeContainer.innerHTML =
+      '<div class="empty">Belum ada tugas aktif.</div>';
+  } else {
+    active.forEach(task => {
+      activeContainer.appendChild(createTaskElement(task));
+    });
+  }
+
+  if (completed.length === 0) {
+    completedContainer.innerHTML =
+      '<div class="empty">Belum ada tugas yang selesai.</div>';
+  } else {
+    completed.forEach(task => {
+      completedContainer.appendChild(createTaskElement(task));
+    });
+  }
+
+  updateStats();
+}
+
+form.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const name = nameInput.value.trim();
+
+  if (!name) return;
+
+  const taskData = {
+    name,
+    priority: priorityInput.value,
+    deadline: deadlineInput.value,
+    description: descriptionInput.value.trim()
+  };
+
+  if (editingId !== null) {
+    tasks = tasks.map(task =>
+      task.id === editingId
+        ? { ...task, ...taskData }
+        : task
+    );
+
+    editingId = null;
+  } else {
+    tasks.push({
+      id: Date.now().toString() + Math.random().toString(16).slice(2),
+      ...taskData,
+      done: false,
+      createdAt: new Date().toISOString()
+    });
+  }
+
+  saveTasks();
+  resetForm();
+  renderTasks();
+});
+
+function editTask(id) {
+  const task = tasks.find(item => item.id === id);
+  if (!task) return;
+
+  editingId = id;
+
+  nameInput.value = task.name;
+  priorityInput.value = task.priority || "medium";
+  deadlineInput.value = task.deadline || "";
+  descriptionInput.value = task.description || "";
+
+  document.getElementById("formTitle").textContent = "Edit Tugas";
+  document.getElementById("submitButton").textContent = "Simpan Perubahan";
+  document.getElementById("cancelEdit").classList.remove("hidden");
+
+  document.getElementById("taskForm").scrollIntoView({
+    behavior: "smooth"
+  });
+}
+
+function resetForm() {
+  form.reset();
+  editingId = null;
+
+  document.getElementById("formTitle").textContent =
+    "Tambah Tugas Baru";
+
+  document.getElementById("submitButton").textContent =
+    "+ Tambahkan Tugas";
+
+  document.getElementById("cancelEdit").classList.add("hidden");
+}
+
+document.getElementById("cancelEdit").addEventListener(
+  "click", resetForm
+);
+
+function toggleTask(id) {
+  tasks = tasks.map(task =>
+    task.id === id
+      ? { ...task, done: !task.done }
+      : task
+  );
+
+  saveTasks();
+  renderTasks();
+}
+
+function deleteTask(id) {
+  const confirmed = confirm("Yakin ingin menghapus tugas ini?");
+
+  if (!confirmed) return;
+
+  tasks = tasks.filter(task => task.id !== id);
+
+  if (editingId === id) resetForm();
+
+  saveTasks();
+  renderTasks();
+}
+
+document.getElementById("searchInput").addEventListener(
+  "input", renderTasks
+);
+
+document.getElementById("priorityFilter").addEventListener(
+  "change", renderTasks
+);
+
+loadTasks();
+renderTasks();
+</script>
+</body>
+</html>
